@@ -1,0 +1,39 @@
+<!-- Render the website base, meaning the default look (header & footer) 
+ as well website data like:
+ - css file location
+ - meta data
+ - fonts for website's logo
+ - website's favicon (the little website logo in the browser's tab)-->
+{% extends 'base.html' %}
+
+<!-- Designate which html code should be used once base.html is rendered.-->
+{% block news %}
+    <section class="news-section">
+      {% for post_key, post_data in posts %}
+        <article class="news-article">
+          <div class="article-header">
+                <!-- Make a backup image which shows the source website logo instead-->
+            {% if post_data.image_url %}
+              <img src="{{ post_data.image_url }}" alt="Article image for {{ post_key[1] }}" class="article-image">{{ post_data.image_url }}
+            {% endif %} 
+            <div class="article-info">
+                <h2 class="article-title">
+                    <a href="{{ post_data.article_url }}" target="_blank">{{ post_key[1] }}</a>
+                </h2>
+                <address>
+                    <time datetime="{{ post_data.date.isoformat }}">{{ post_data.date.strftime('%B %d, %Y') }}</time>
+                    {{ post_data.writer}}
+                </address>
+            </div>
+          </div>
+          <div class="article-content">
+            {% for paragraph in post_data.content %}
+              <p>{{ paragraph }}</p>
+            {% endfor%}
+          </div>
+          <div class="expand-button" onclick="expandArticle(this)">Read More ▼</div>
+          <div class="article-footer"></div>
+        </article>
+      {% endfor %}
+    </section>
+{% endblock %}

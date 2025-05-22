@@ -1,0 +1,45 @@
+name: Mirror release to Public
+
+# When someone pushes to the main branch in the private repo.
+on:
+  push:
+    branches:
+      - main
+
+# Using GitHub's ubuntu vm.
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    # Gather all the code from the private repo within a folder on the vm.
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      # Gather all the code from the public repo within another folder on the vm.
+      - name: Checkout public repo
+        uses: actions/checkout@v4
+        with:
+          repository: C00272369/CyberWatch-Public
+          token: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          path: public
+
+      # Copy the code from the gathered private repo, and overwrite the gathered public repo code, except for the 'LICENSE' and '.git/' files.
+      - name: Sync to public
+        run: |
+          rsync -av --delete \
+            --exclude '.git/' \
+            --exclude 'LICENSE' \
+            . public/
+
+      # Commit and push this version to public repo
+      - name: Commit & push
+        run: |
+          cd public
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add .
+          git commit -m "sync: Mirror release from private @${{ github.sha }}" || echo "No changes"
+          git push
