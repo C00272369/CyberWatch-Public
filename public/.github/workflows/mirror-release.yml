@@ -11,14 +11,14 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
 
-    # Gather all the code from the private repo within a folder on the vm.
+    # Gather all the code from the private repo into a folder on the vm.
     steps:
       - name: Checkout private repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           
-      # Gather all the code from the public repo within another folder on the vm.
+      # Gather all the code from the public repo into another folder on the vm.
       - name: Checkout public repo
         uses: actions/checkout@v4
         with:
@@ -34,7 +34,7 @@ jobs:
             --exclude 'LICENSE' \
             . public/
 
-      # Commit and push this version to public repo
+      # Commit and push this version to public repo, setting the commit comment with the username of the individual who updated the main branch.
       - name: Commit & push
         run: |
           cd public

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+        <title>CyberWatch</title>
+        <!-- <ChatGPT> -->
+        <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Press+Start+2P&family=Permanent+Marker&family=Audiowide&display=swap" rel="stylesheet">
+        <!-- </ChatGPT -->
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../static/css/styles.css">
+    </head>
+    <body>
+        {% include 'header.html' %}
+        
+        {% block news %}{% endblock %}
+        
+        {% include 'footer.html' %}
+        <script>
+          function expandArticle(button) {
+              const articleContent = button.previousElementSibling;
+              if (articleContent.style.maxHeight === "none") {
+                  // Already expanded → collapse it
+                  articleContent.style.maxHeight = "120px";
+                  button.textContent = "Read More ▼";
+              } 
+              else {
+                  // Expand
+                  articleContent.style.maxHeight = "none";
+                  button.textContent = "Collapse ▲";
+              }
+          }
+        </script>
+    </body>
+  </html>
